@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mustafa\\Desktop\\SentimentAPI\\SentimentAPI.csproj": {}
+    "C:\\Users\\Mustafa\\Documents\\GitHub\\STR13\\fullstack-ai-chat\\backend\\SentimentAPI\\SentimentAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mustafa\\Desktop\\SentimentAPI\\SentimentAPI.csproj": {
+    "C:\\Users\\Mustafa\\Documents\\GitHub\\STR13\\fullstack-ai-chat\\backend\\SentimentAPI\\SentimentAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mustafa\\Desktop\\SentimentAPI\\SentimentAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Mustafa\\Documents\\GitHub\\STR13\\fullstack-ai-chat\\backend\\SentimentAPI\\SentimentAPI.csproj",
         "projectName": "SentimentAPI",
-        "projectPath": "C:\\Users\\Mustafa\\Desktop\\SentimentAPI\\SentimentAPI.csproj",
+        "projectPath": "C:\\Users\\Mustafa\\Documents\\GitHub\\STR13\\fullstack-ai-chat\\backend\\SentimentAPI\\SentimentAPI.csproj",
         "packagesPath": "C:\\Users\\Mustafa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mustafa\\Desktop\\SentimentAPI\\obj\\",
+        "outputPath": "C:\\Users\\Mustafa\\Documents\\GitHub\\STR13\\fullstack-ai-chat\\backend\\SentimentAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
