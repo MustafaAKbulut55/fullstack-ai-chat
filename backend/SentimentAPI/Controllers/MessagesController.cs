@@ -27,7 +27,6 @@ namespace SentimentAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> PostMessage([FromBody] MessageRequest request)
         {
-            // 1️⃣ Kullanıcıyı bul veya oluştur
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Nickname == request.Nickname);
             if (user == null)
             {
@@ -40,28 +39,23 @@ namespace SentimentAPI.Controllers
 
             try
             {
-                // 2️⃣ HF'ye istek gönder (event_id al)
                 var hfRequest = new { data = new[] { request.Text } };
                 var firstResponse = await _http.PostAsJsonAsync($"{HfBase}/gradio_api/call/{ApiName}", hfRequest);
                 var firstJson = await firstResponse.Content.ReadAsStringAsync();
-                Console.WriteLine("[HF RESPONSE 1] " + firstJson);
 
                 string? eventId = null;
                 using (var doc = JsonDocument.Parse(firstJson))
                 {
-                    if (doc.RootElement.TryGetProperty("event_id", out var eventProp))
-                        eventId = eventProp.GetString();
+                    if (doc.RootElement.TryGetProperty("event_id", out var prop))
+                        eventId = prop.GetString();
                 }
 
-                // 3️⃣ Event_id varsa sonucu al
                 if (!string.IsNullOrEmpty(eventId))
                 {
-                    await Task.Delay(1000); // biraz bekle
+                    await Task.Delay(1000);
                     var secondResponse = await _http.GetAsync($"{HfBase}/gradio_api/call/{ApiName}/{eventId}");
                     var resultText = await secondResponse.Content.ReadAsStringAsync();
-                    Console.WriteLine("[HF RESPONSE 2] " + resultText);
 
-                    // 4️⃣ SSE formatından sadece data satırını çekelim
                     var match = Regex.Match(resultText, @"data:\s*\[(.*?)\]", RegexOptions.Singleline);
                     if (match.Success)
                     {
@@ -75,7 +69,6 @@ namespace SentimentAPI.Controllers
                 Console.WriteLine($"[HF ERROR] {ex.Message}");
             }
 
-            // 5️⃣ DB'ye kaydet
             var message = new Message
             {
                 UserId = user.Id,
@@ -102,20 +95,17 @@ namespace SentimentAPI.Controllers
                     m.Text,
                     m.Sentiment,
                     m.CreatedAt,
-                    Nickname = m.User != null && !string.IsNullOrEmpty(m.User.Nickname)
-                        ? m.User.Nickname
-                        : "Anonim"
+                    Nickname = m.User != null ? m.User.Nickname : "Anonim"
                 })
                 .ToListAsync();
 
             return Ok(messages);
         }
 
-        // 🔹 Eksik olan kapatma burasıydı
         public class MessageRequest
         {
             public string Text { get; set; } = string.Empty;
             public string Nickname { get; set; } = string.Empty;
         }
-    } // ← sınıf MessagesController burada kapanıyor
-} // ← namespace SentimentAPI.Controllers burada kapanıyor
+    }
+}
