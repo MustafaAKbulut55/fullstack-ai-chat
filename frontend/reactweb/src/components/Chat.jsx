@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "https://fullstack-ai-chat-dpog.onrender.com";
+// ✅ Backend adresini doğrudan Render URL ile sabitliyoruz
+const API_BASE = "https://fullstack-ai-chat-dpog.onrender.com";
 
 export default function Chat({ nickname }) {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // 🟢 Mesajları her 3 saniyede bir yenile
   useEffect(() => {
     fetchMessages();
     const interval = setInterval(fetchMessages, 3000);
     return () => clearInterval(interval);
   }, []);
 
+  // 🟢 Mesajları backend'den al
   const fetchMessages = async () => {
     try {
       const res = await fetch(`${API_BASE}/api/messages?limit=50`);
@@ -23,6 +26,7 @@ export default function Chat({ nickname }) {
     }
   };
 
+  // 🟢 Yeni mesaj gönder
   const sendMessage = async (e) => {
     e.preventDefault();
     if (!text.trim()) return;
@@ -34,6 +38,7 @@ export default function Chat({ nickname }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nickname, text }),
       });
+
       const newMsg = await res.json();
       setMessages((prev) => [...prev, newMsg]);
       setText("");
@@ -49,37 +54,23 @@ export default function Chat({ nickname }) {
       <h2>👋 Hoş geldin, {nickname}</h2>
 
       <div className="chat-messages">
-        {messages.map((m) => {
-          const isMine = m.nickname === nickname;
-
-          return (
-            <div
-              key={m.id}
-              className={`chat-message ${isMine ? "mine" : "other"}`}
-              style={{
-                alignSelf: isMine ? "flex-end" : "flex-start",
-                backgroundColor: isMine ? "#2563eb" : "#2a2b2e",
-                color: isMine ? "#fff" : "#e8e8e8",
-              }}
+        {messages.map((m) => (
+          <div key={m.id} className="chat-line">
+            <span className="nickname">{m.nickname || "Anonim"}:</span>
+            <span className="text">{m.text}</span>
+            <span
+              className={`sentiment ${
+                m.sentiment === "Positive"
+                  ? "positive"
+                  : m.sentiment === "Negative"
+                  ? "negative"
+                  : "neutral"
+              }`}
             >
-              <div>
-                <span className="nickname">{m.nickname || "Anonim"}</span>:{" "}
-                <span className="text">{m.text}</span>
-              </div>
-              <span
-                className={`sentiment ${
-                  m.sentiment === "Positive"
-                    ? "positive"
-                    : m.sentiment === "Negative"
-                    ? "negative"
-                    : "neutral"
-                }`}
-              >
-                {m.sentiment}
-              </span>
-            </div>
-          );
-        })}
+              {m.sentiment}
+            </span>
+          </div>
+        ))}
       </div>
 
       <form onSubmit={sendMessage} className="chat-form">
