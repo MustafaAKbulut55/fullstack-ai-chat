@@ -1,0 +1,146 @@
+
+/* Genel düzen */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #0e0f11;
+  color: #e8e8e8;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* 💬 Nickname ekranı */
+.gate-container {
+  text-align: center;
+  background: #1a1b1e;
+  padding: 2rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
+}
+
+.gate-form {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.gate-form input {
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  border: none;
+  font-size: 1rem;
+}
+
+.gate-form button {
+  padding: 0.8rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.gate-form button:hover {
+  background: #1d4ed8;
+}
+
+/* 💬 Chat ekranı */
+.chat-container {
+  width: 400px;
+  background: #1a1b1e;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+}
+
+.chat-container h2 {
+  text-align: center;
+  color: #93c5fd;
+  margin-bottom: 1rem;
+}
+
+/* Mesaj listesi */
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding-right: 5px;
+}
+
+/* Tek bir mesaj */
+.chat-message {
+  background: #2a2b2e;
+  padding: 0.5rem 0.7rem;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.nickname {
+  font-weight: 600;
+  color: #60a5fa;
+}
+
+.sentiment {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+}
+
+.sentiment.positive {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.sentiment.negative {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.sentiment.neutral {
+  background: rgba(234, 179, 8, 0.2);
+  color: #eab308;
+}
+
+/* Mesaj input */
+.chat-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chat-form input {
+  flex: 1;
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: none;
+  font-size: 1rem;
+}
+
+.chat-form button {
+  padding: 0.6rem 1rem;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.chat-form button:hover {
+  background: #1d4ed8;
+}
