@@ -29,7 +29,7 @@ export default function Chat({ nickname }) {
   // 🔹 Mesaj gönder
   const sendMessage = async (e) => {
     e.preventDefault();
-    if (!text.trim()) return;
+    if (!text.trim() || loading) return;
 
     setLoading(true);
     try {
@@ -38,14 +38,22 @@ export default function Chat({ nickname }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nickname, text }),
       });
-      const newMsg = await res.json();
 
+      const newMsg = await res.json();
       setMessages((prev) => [...prev, newMsg]);
-      setText("");
     } catch (err) {
       alert("Mesaj gönderilemedi!");
     } finally {
+      // ✅ Her durumda input sıfırlanır
+      setText("");
       setLoading(false);
+    }
+  };
+
+  // 🔹 Enter tuşuyla mesaj gönder
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && !loading) {
+      sendMessage(e);
     }
   };
 
@@ -57,7 +65,6 @@ export default function Chat({ nickname }) {
         {messages.map((m) => (
           <div key={m.id} className="chat-message">
             <div>
-              {/* 🔹 Sadece mesajı atan kişinin ismi yazacak */}
               <span className="nickname">{m.nickname ?? "Anonim"}</span>:{" "}
               <span className="text">{m.text}</span>
             </div>
@@ -83,10 +90,11 @@ export default function Chat({ nickname }) {
           placeholder="Mesajınızı yazın..."
           value={text}
           onChange={(e) => setText(e.target.value)}
+          onKeyDown={handleKeyPress}
           disabled={loading}
         />
         <button type="submit" disabled={loading}>
-          {loading ? "Gönderiliyor..." : "Gönder"}
+          {loading ? "⏳ Gönderiliyor..." : "Gönder"}
         </button>
       </form>
     </div>

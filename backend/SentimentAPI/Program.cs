@@ -23,7 +23,12 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddControllers();
+// 🔹 JSON döngü hatasını engelle
+builder.Services.AddControllers().AddJsonOptions(x =>
+{
+    x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -46,11 +51,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// 🔹 Veritabanı migration'larını otomatik uygula (önemli!)
+// 🔹 Veritabanı migration'larını otomatik uygula
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate(); // Eğer tablo yoksa otomatik oluşturur
+    db.Database.Migrate();
 }
 
 // 🔹 Render için PORT ayarı
