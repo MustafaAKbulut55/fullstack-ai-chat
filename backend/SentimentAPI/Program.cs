@@ -8,22 +8,21 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-        policy =>
-        {
-            policy.WithOrigins(
-                "http://localhost:3000",         // React (eski)
-                "http://localhost:5173",         // Vite React portu ✅
-                "http://10.0.2.2:8081",          // Android Emulator
-                "http://127.0.0.1:8081",         // Mobil test
-                "https://your-vercel-app.vercel.app", // Vercel deploy
-                "https://fullstack-ai-chat-dpog.onrender.com" // Backend Render URL
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://localhost:5173",              // React dev
+                "http://127.0.0.1:5173",              // Alternatif localhost
+                "https://fullstack-ai-chat-dpog.onrender.com", // Backend (self)
+                "https://vercel-app-url.vercel.app"   // (ileride eklenecek)
             )
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials();
-        });
+            .SetIsOriginAllowed(_ => true); // 👈 Bu satır kritik (her origin'i geçici olarak izinli yapar)
+    });
 });
+
 
 
 // 🔹 2️⃣ Controller & Swagger servisi
@@ -41,7 +40,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 var app = builder.Build();
 
 // 🔹 5️⃣ CORS middleware aktif
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors("AllowFrontend");
+
 
 // 🔹 6️⃣ Swagger sadece development'ta aktif
 if (app.Environment.IsDevelopment())
