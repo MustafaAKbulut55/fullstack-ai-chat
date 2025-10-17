@@ -91,17 +91,25 @@ namespace SentimentAPI.Controllers
             return Ok(message);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetMessages([FromQuery] int limit = 50)
+      [HttpGet]
+public async Task<IActionResult> GetMessages([FromQuery] int limit = 50)
+{
+    var messages = await _context.Messages
+        .Include(m => m.User) // User tablosuna join
+        .OrderByDescending(m => m.CreatedAt)
+        .Take(limit)
+        .Select(m => new
         {
-            var messages = await _context.Messages
-                .OrderByDescending(m => m.CreatedAt)
-                .Take(limit)
-                .ToListAsync();
+            m.Id,
+            m.Text,
+            m.Sentiment,
+            m.CreatedAt,
+            Nickname = m.User.Nickname
+        })
+        .ToListAsync();
 
-            return Ok(messages);
-        }
-    }
+    return Ok(messages);
+}
 
     public class MessageRequest
     {
