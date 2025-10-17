@@ -91,7 +91,7 @@ namespace SentimentAPI.Controllers
             return Ok(message);
         }
 
-    [HttpGet]
+   [HttpGet]
 public async Task<IActionResult> GetMessages([FromQuery] int limit = 50)
 {
     var messages = await _context.Messages
@@ -104,12 +104,13 @@ public async Task<IActionResult> GetMessages([FromQuery] int limit = 50)
             m.Text,
             m.Sentiment,
             m.CreatedAt,
-            Nickname = m.User.Nickname // 🔹 burası eklendi
+            Nickname = m.User != null ? m.User.Nickname : "Anonim" // 🔹 kullanıcı adını da ekliyoruz
         })
         .ToListAsync();
 
     return Ok(messages);
 }
+
 
 
     public class MessageRequest
