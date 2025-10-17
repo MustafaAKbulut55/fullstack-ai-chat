@@ -51,6 +51,13 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 app.MapControllers();
 
-// 🔹 7️⃣ Render ortamı için PORT değişkenini kullan
+// 🔹 7️⃣ Migration'ı otomatik çalıştır (Render’da tablo yoksa oluşturur)
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+
+// 🔹 8️⃣ Render ortamı için PORT değişkenini kullan
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Run($"http://0.0.0.0:{port}");
