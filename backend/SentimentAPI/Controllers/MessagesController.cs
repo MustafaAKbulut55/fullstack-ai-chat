@@ -62,12 +62,10 @@ namespace SentimentAPI.Controllers
                     Console.WriteLine("[HF RESPONSE 2] " + resultText);
 
                     // 4️⃣ SSE formatından sadece data satırını çekelim
-                    // Örnek: event: complete\ndata: ["Positive | Scores → {...}"]
                     var match = Regex.Match(resultText, @"data:\s*\[(.*?)\]", RegexOptions.Singleline);
                     if (match.Success)
                     {
                         var content = match.Groups[1].Value.Trim('"', ' ', '[', ']');
-                        // "Positive | Scores → ..." kısmından sadece "Positive" al
                         sentiment = content.Split('|')[0].Trim();
                     }
                 }
@@ -91,35 +89,33 @@ namespace SentimentAPI.Controllers
             return Ok(message);
         }
 
-[HttpGet]
-public async Task<IActionResult> GetMessages([FromQuery] int limit = 50)
-{
-    var messages = await _context.Messages
-        .Include(m => m.User) // 🔹 Mesaja bağlı kullanıcıyı dahil et
-        .OrderByDescending(m => m.CreatedAt)
-        .Take(limit)
-        .Select(m => new
+        [HttpGet]
+        public async Task<IActionResult> GetMessages([FromQuery] int limit = 50)
         {
-            m.Id,
-            m.Text,
-            m.Sentiment,
-            m.CreatedAt,
-            // 🔹 Kullanıcı varsa adını döner, yoksa “Anonim” yazar
-            Nickname = m.User != null && !string.IsNullOrEmpty(m.User.Nickname)
-                ? m.User.Nickname
-                : "Anonim"
-        })
-        .ToListAsync();
+            var messages = await _context.Messages
+                .Include(m => m.User)
+                .OrderByDescending(m => m.CreatedAt)
+                .Take(limit)
+                .Select(m => new
+                {
+                    m.Id,
+                    m.Text,
+                    m.Sentiment,
+                    m.CreatedAt,
+                    Nickname = m.User != null && !string.IsNullOrEmpty(m.User.Nickname)
+                        ? m.User.Nickname
+                        : "Anonim"
+                })
+                .ToListAsync();
 
-    return Ok(messages);
-}
+            return Ok(messages);
+        }
 
-
-
-
-    public class MessageRequest
-    {
-        public string Text { get; set; } = string.Empty;
-        public string Nickname { get; set; } = string.Empty;
-    }
-}
+        // 🔹 Eksik olan kapatma burasıydı
+        public class MessageRequest
+        {
+            public string Text { get; set; } = string.Empty;
+            public string Nickname { get; set; } = string.Empty;
+        }
+    } // ← sınıf MessagesController burada kapanıyor
+} // ← namespace SentimentAPI.Controllers burada kapanıyor
