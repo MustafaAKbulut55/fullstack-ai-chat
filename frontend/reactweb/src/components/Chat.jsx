@@ -4,7 +4,6 @@ const API_BASE = "https://fullstack-ai-chat-dpog.onrender.com";
 
 console.log("API_BASE:", API_BASE);
 
-
 export default function Chat({ nickname }) {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
@@ -16,6 +15,7 @@ export default function Chat({ nickname }) {
     return () => clearInterval(interval);
   }, []);
 
+  // 🔹 Mesajları çek
   const fetchMessages = async () => {
     try {
       const res = await fetch(`${API_BASE}/api/messages?limit=50`);
@@ -26,6 +26,7 @@ export default function Chat({ nickname }) {
     }
   };
 
+  // 🔹 Mesaj gönder
   const sendMessage = async (e) => {
     e.preventDefault();
     if (!text.trim()) return;
@@ -38,6 +39,7 @@ export default function Chat({ nickname }) {
         body: JSON.stringify({ nickname, text }),
       });
       const newMsg = await res.json();
+
       setMessages((prev) => [...prev, newMsg]);
       setText("");
     } catch (err) {
@@ -55,9 +57,11 @@ export default function Chat({ nickname }) {
         {messages.map((m) => (
           <div key={m.id} className="chat-message">
             <div>
-              <span className="nickname">{m.nickname || nickname}</span>:{" "}
+              {/* 🔹 Sadece mesajı atan kişinin ismi yazacak */}
+              <span className="nickname">{m.nickname ?? "Anonim"}</span>:{" "}
               <span className="text">{m.text}</span>
             </div>
+
             <span
               className={`sentiment ${
                 m.sentiment === "Positive"
