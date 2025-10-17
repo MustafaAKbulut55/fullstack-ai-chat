@@ -55,7 +55,11 @@ export default function Chat({ nickname }) {
         {messages.map((m) => (
           <div key={m.id} className="chat-message">
             <div>
-             <span className="nickname">{m.nickname}</span>:
+            <div>
+  <span className="nickname">{m.nickname || "Anonim"}</span>:{" "}
+  <span className="text">{m.text}</span>
+</div>
+
               <span className="text">{m.text}</span>
             </div>
             <span
