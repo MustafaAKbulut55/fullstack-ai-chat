@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
 
-// ✅ Backend adresini doğrudan Render URL ile sabitliyoruz
 const API_BASE = "https://fullstack-ai-chat-dpog.onrender.com";
+
+console.log("API_BASE:", API_BASE);
+
 
 export default function Chat({ nickname }) {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 🟢 Mesajları her 3 saniyede bir yenile
   useEffect(() => {
     fetchMessages();
     const interval = setInterval(fetchMessages, 3000);
     return () => clearInterval(interval);
   }, []);
 
-  // 🟢 Mesajları backend'den al
   const fetchMessages = async () => {
     try {
       const res = await fetch(`${API_BASE}/api/messages?limit=50`);
@@ -26,7 +26,6 @@ export default function Chat({ nickname }) {
     }
   };
 
-  // 🟢 Yeni mesaj gönder
   const sendMessage = async (e) => {
     e.preventDefault();
     if (!text.trim()) return;
@@ -38,7 +37,6 @@ export default function Chat({ nickname }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nickname, text }),
       });
-
       const newMsg = await res.json();
       setMessages((prev) => [...prev, newMsg]);
       setText("");
@@ -55,9 +53,11 @@ export default function Chat({ nickname }) {
 
       <div className="chat-messages">
         {messages.map((m) => (
-          <div key={m.id} className="chat-line">
-            <span className="nickname">{m.nickname || "Anonim"}:</span>
-            <span className="text">{m.text}</span>
+          <div key={m.id} className="chat-message">
+            <div>
+              <span className="nickname">{m.nickname || nickname}</span>:{" "}
+              <span className="text">{m.text}</span>
+            </div>
             <span
               className={`sentiment ${
                 m.sentiment === "Positive"
