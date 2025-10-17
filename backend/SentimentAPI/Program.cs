@@ -14,8 +14,8 @@ builder.Services.AddCors(options =>
             "http://localhost:3000",           // React local (dev)
             "http://127.0.0.1:5173",           // Vite default port
             "http://10.0.2.2:8081",            // Android emulator
-            "https://fullstack-ai-chat.vercel.app", // ✅ senin gerçek Vercel domainin
-            "https://fullstack-ai-chat-dpog.onrender.com" // ✅ backend kendi domaini
+            "https://fullstack-ai-chat.vercel.app", // ✅ frontend domain
+            "https://fullstack-ai-chat-dpog.onrender.com" // ✅ backend domain
         )
         .AllowAnyHeader()
         .AllowAnyMethod()
@@ -45,6 +45,13 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+// 🔹 Veritabanı migration'larını otomatik uygula (önemli!)
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate(); // Eğer tablo yoksa otomatik oluşturur
+}
 
 // 🔹 Render için PORT ayarı
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
