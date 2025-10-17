@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SentimentAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3f6df2cd7ba555686d01fd38b89f68d7945d7dee")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d1a60e79e8418f97738586f3168fe60b869dc890")]
 [assembly: System.Reflection.AssemblyProductAttribute("SentimentAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SentimentAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

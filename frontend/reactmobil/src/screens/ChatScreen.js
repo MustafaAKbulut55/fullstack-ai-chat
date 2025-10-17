@@ -1,3 +1,12 @@
+// ============================================================
+// 💬 ChatScreen.js
+// Bu ekran, kullanıcıların gerçek zamanlı olarak mesaj gönderip
+// AI destekli duygu analiz sonuçlarını görebileceği ana sohbet ekranıdır.
+//
+// Backend:  .NET 8 (Render’da host edilir)
+// Frontend: React Native (Expo)
+// ============================================================
+
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -9,63 +18,102 @@ import {
   ActivityIndicator,
 } from "react-native";
 
+// ------------------------------------------------------------
+// 🔹 API bağlantı noktası
+// Render üzerinde çalışan .NET backend servisine istek atılır.
+// ------------------------------------------------------------
 const API_BASE = "https://fullstack-ai-chat-dpog.onrender.com";
 
+// ============================================================
+// 🧩 ChatScreen Bileşeni
+// route parametresinden gelen "nickname" değeri kullanılarak
+// kullanıcının kimliği belirlenir.
+// ============================================================
 export default function ChatScreen({ route }) {
-  const { nickname } = route.params;
-  const [messages, setMessages] = useState([]);
-  const [text, setText] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { nickname } = route.params; // Giriş ekranından gelen kullanıcı adı
+  const [messages, setMessages] = useState([]); // Mesaj listesi
+  const [text, setText] = useState(""); // Girilen mesaj
+  const [loading, setLoading] = useState(false); // Gönderim sırasında loader kontrolü
 
+  // ------------------------------------------------------------
+  // 🔹 useEffect → Mesajların otomatik olarak çekilmesi
+  // Uygulama açıldığında mesajları yükler ve her 3 saniyede bir yeniler.
+  // ------------------------------------------------------------
   useEffect(() => {
     fetchMessages();
-    const interval = setInterval(fetchMessages, 3000);
-    return () => clearInterval(interval);
+    const interval = setInterval(fetchMessages, 3000); // 3 saniyede bir yenileme
+    return () => clearInterval(interval); // Bellek sızıntısını önleme
   }, []);
 
+  // ------------------------------------------------------------
+  // 🔹 Mesajları API'den çekme
+  // GET /api/messages → Son 50 mesaj alınır.
+  // ------------------------------------------------------------
   const fetchMessages = async () => {
     try {
       const res = await fetch(`${API_BASE}/api/messages?limit=50`);
       const data = await res.json();
-      setMessages(data.reverse());
+      setMessages(data.reverse()); // En yeni mesaj en altta olacak şekilde ters çevir
     } catch (err) {
       console.error("Mesajlar alınamadı:", err);
     }
   };
 
+  // ------------------------------------------------------------
+  // 🔹 Mesaj Gönderme
+  // POST /api/messages → Kullanıcı mesajı gönderir.
+  // Backend, AI servisine gönderip duygu analizini yapar.
+  // ------------------------------------------------------------
   const sendMessage = async () => {
-    if (!text.trim()) return;
+    if (!text.trim()) return; // Boş mesaj engeli
     setLoading(true);
+
     try {
       await fetch(`${API_BASE}/api/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nickname, text }),
+        body: JSON.stringify({ nickname, text }), // Kullanıcı adı + mesaj
       });
-      setText("");
-      fetchMessages();
+
+      setText(""); // Input temizle
+      fetchMessages(); // Listeyi yenile
     } catch (err) {
       console.error("Mesaj gönderilemedi:", err);
     }
+
     setLoading(false);
   };
 
+  // ------------------------------------------------------------
+  // 🔹 Tek bir mesaj kutusunu render eder
+  // Kullanıcı adı (sol), mesaj içeriği (ortada),
+  // ve sentiment sonucu (sağda) gösterilir.
+  // ------------------------------------------------------------
   const renderMessage = ({ item }) => (
     <View style={styles.messageBox}>
       <View style={styles.messageRow}>
+        {/* Sol tarafta kullanıcı ve mesaj */}
         <Text style={styles.messageLeft}>
           <Text style={styles.nickname}>{item.nickname}: </Text>
           <Text style={styles.text}>{item.text}</Text>
         </Text>
+
+        {/* Sağda AI duygu analizi sonucu */}
         <Text style={styles.sentimentRight}>{item.sentiment}</Text>
       </View>
     </View>
   );
 
+  // ============================================================
+  // 🔹 UI Yapısı
+  // Üstte hoşgeldin metni, ortada mesaj listesi,
+  // altta giriş kutusu ve "Gönder" butonu yer alır.
+  // ============================================================
   return (
     <View style={styles.container}>
       <Text style={styles.header}>👋 Hoş geldin, {nickname}</Text>
 
+      {/* Mesaj listesi */}
       <FlatList
         data={messages}
         keyExtractor={(item) => item.id?.toString()}
@@ -73,6 +121,7 @@ export default function ChatScreen({ route }) {
         contentContainerStyle={{ paddingBottom: 10 }}
       />
 
+      {/* Mesaj gönderme alanı */}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -93,6 +142,9 @@ export default function ChatScreen({ route }) {
   );
 }
 
+// ============================================================
+// 🎨 Stil Tanımları
+// ============================================================
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -113,8 +165,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   messageRow: {
-    flexDirection: "row", // 🔹 yan yana hizalama
-    justifyContent: "space-between", // 🔹 biri sola, biri sağa
+    flexDirection: "row", // Mesaj ve sentiment yan yana
+    justifyContent: "space-between", // Biri sola, biri sağa
     alignItems: "center",
   },
   messageLeft: {
@@ -124,7 +176,7 @@ const styles = StyleSheet.create({
   },
   nickname: {
     fontWeight: "bold",
-    color: "#61dafb",
+    color: "#61dafb", // React mavisi
   },
   text: {
     color: "#fff",
@@ -151,7 +203,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 8,
     padding: 10,
-    backgroundColor: "#fff", // 🔹 beyaz input
+    backgroundColor: "#fff", // 🔹 beyaz input alanı
     color: "#000",
     marginRight: 10,
   },
@@ -161,5 +213,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 8,
   },
-  buttonText: { color: "#fff", fontWeight: "bold" },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
 });

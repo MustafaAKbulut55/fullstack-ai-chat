@@ -1,5 +1,8 @@
-
-/* Genel düzen */
+/* ============================================================
+🌙 Genel Stil Ayarları
+Uygulama koyu tema (dark mode) tasarımına sahiptir.
+Tüm metin renkleri, kutular ve butonlar bu stile göre uyarlanmıştır.
+============================================================ */
 body {
   font-family: 'Inter', sans-serif;
   background-color: #0e0f11;
@@ -12,7 +15,7 @@ body {
   height: 100vh;
 }
 
-/* 💬 Nickname ekranı */
+/* 💬 Nickname ekranı (kullanıcı giriş alanı) */
 .gate-container {
   text-align: center;
   background: #1a1b1e;
@@ -21,6 +24,7 @@ body {
   box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
 }
 
+/* Form alanı (input + buton) */
 .gate-form {
   margin-top: 1.5rem;
   display: flex;
@@ -28,6 +32,7 @@ body {
   gap: 1rem;
 }
 
+/* Kullanıcı girişi input alanı */
 .gate-form input {
   padding: 0.8rem 1rem;
   border-radius: 6px;
@@ -35,6 +40,7 @@ body {
   font-size: 1rem;
 }
 
+/* "Devam Et" butonu */
 .gate-form button {
   padding: 0.8rem 1rem;
   border: none;
@@ -45,12 +51,11 @@ body {
   cursor: pointer;
   transition: 0.2s ease;
 }
-
 .gate-form button:hover {
   background: #1d4ed8;
 }
 
-/* 💬 Chat ekranı */
+/* 💬 Chat ekranı ana kapsayıcı */
 .chat-container {
   width: 400px;
   background: #1a1b1e;
@@ -61,13 +66,14 @@ body {
   height: 80vh;
 }
 
+/* Başlık */
 .chat-container h2 {
   text-align: center;
   color: #93c5fd;
   margin-bottom: 1rem;
 }
 
-/* Mesaj listesi */
+/* Mesaj listesi alanı */
 .chat-messages {
   flex: 1;
   overflow-y: auto;
@@ -78,7 +84,7 @@ body {
   padding-right: 5px;
 }
 
-/* Tek bir mesaj */
+/* Tek bir mesaj kutusu */
 .chat-message {
   background: #2a2b2e;
   padding: 0.5rem 0.7rem;
@@ -90,11 +96,13 @@ body {
   font-size: 0.9rem;
 }
 
+/* Kullanıcı ismi (nickname) */
 .nickname {
   font-weight: 600;
   color: #60a5fa;
 }
 
+/* Duygu etiketi */
 .sentiment {
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
@@ -102,27 +110,25 @@ body {
   text-transform: capitalize;
 }
 
+/* Duygu renk temaları */
 .sentiment.positive {
   background: rgba(34, 197, 94, 0.2);
   color: #22c55e;
 }
-
 .sentiment.negative {
   background: rgba(239, 68, 68, 0.2);
   color: #ef4444;
 }
-
 .sentiment.neutral {
   background: rgba(234, 179, 8, 0.2);
   color: #eab308;
 }
 
-/* Mesaj input */
+/* Mesaj yazma formu */
 .chat-form {
   display: flex;
   gap: 0.5rem;
 }
-
 .chat-form input {
   flex: 1;
   padding: 0.6rem;
@@ -131,6 +137,7 @@ body {
   font-size: 1rem;
 }
 
+/* Gönder butonu */
 .chat-form button {
   padding: 0.6rem 1rem;
   background: #2563eb;
@@ -140,7 +147,6 @@ body {
   cursor: pointer;
   transition: 0.2s;
 }
-
 .chat-form button:hover {
   background: #1d4ed8;
 }

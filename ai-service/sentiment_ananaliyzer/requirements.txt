@@ -1,4 +1,23 @@
+# ============================================================
+# 📦 REQUIREMENTS.TXT
+# Bu dosya, projenin çalışması için gerekli tüm Python
+# bağımlılıklarını (kütüphaneleri) içerir.
+# Render, Vercel veya lokal ortamda bu dosya üzerinden
+# otomatik kurulum yapılabilir:
+
+
+# 🔹 Hugging Face Transformers kütüphanesi
+# Duygu analizi modelini (RoBERTa) yüklemek ve çalıştırmak için.
 transformers
+
+# 🔹 PyTorch
+# Modelin arka planda çalıştığı derin öğrenme çatısı.
 torch
+
+# 🔹 Gradio
+# Kullanıcı arayüzü (UI) oluşturmak ve modeli API olarak sunmak için.
 gradio
+
+# 🔹 NumPy
+# Skor hesaplamaları ve tensor işlemlerinde matematiksel destek sağlar.
 numpy
