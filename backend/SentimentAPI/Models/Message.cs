@@ -10,16 +10,16 @@ namespace SentimentAPI.Models
         public int Id { get; set; }
 
         [Required]
-        public int UserId { get; set; }
-
-        [ForeignKey(nameof(UserId))]
-        public User? User { get; set; } // 🔹 ilişkili kullanıcıyı ekle
-
-        [Required]
         public string Text { get; set; } = string.Empty;
 
         public string Sentiment { get; set; } = "Unknown";
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        // 🔹 İlişkilendirme
+        public int UserId { get; set; }
+
+        [ForeignKey(nameof(UserId))]
+        public User? User { get; set; }
     }
 }
