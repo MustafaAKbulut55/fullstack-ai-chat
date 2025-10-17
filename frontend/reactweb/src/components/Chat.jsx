@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const API_BASE = "https://fullstack-ai-chat-dpog.onrender.com";
-
-console.log("API_BASE:", API_BASE);
-
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "https://fullstack-ai-chat-dpog.onrender.com";
 
 export default function Chat({ nickname }) {
   const [messages, setMessages] = useState([]);
@@ -52,29 +49,37 @@ export default function Chat({ nickname }) {
       <h2>👋 Hoş geldin, {nickname}</h2>
 
       <div className="chat-messages">
-        {messages.map((m) => (
-          <div key={m.id} className="chat-message">
-            <div>
-            <div>
-  <span className="nickname">{m.nickname || "Anonim"}</span>:{" "}
-  <span className="text">{m.text}</span>
-</div>
+        {messages.map((m) => {
+          const isMine = m.nickname === nickname;
 
-              <span className="text">{m.text}</span>
-            </div>
-            <span
-              className={`sentiment ${
-                m.sentiment === "Positive"
-                  ? "positive"
-                  : m.sentiment === "Negative"
-                  ? "negative"
-                  : "neutral"
-              }`}
+          return (
+            <div
+              key={m.id}
+              className={`chat-message ${isMine ? "mine" : "other"}`}
+              style={{
+                alignSelf: isMine ? "flex-end" : "flex-start",
+                backgroundColor: isMine ? "#2563eb" : "#2a2b2e",
+                color: isMine ? "#fff" : "#e8e8e8",
+              }}
             >
-              {m.sentiment}
-            </span>
-          </div>
-        ))}
+              <div>
+                <span className="nickname">{m.nickname || "Anonim"}</span>:{" "}
+                <span className="text">{m.text}</span>
+              </div>
+              <span
+                className={`sentiment ${
+                  m.sentiment === "Positive"
+                    ? "positive"
+                    : m.sentiment === "Negative"
+                    ? "negative"
+                    : "neutral"
+                }`}
+              >
+                {m.sentiment}
+              </span>
+            </div>
+          );
+        })}
       </div>
 
       <form onSubmit={sendMessage} className="chat-form">
