@@ -12,17 +12,19 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins(
-                "http://localhost:3000",          // React web dev ortamı
-                "http://10.0.2.2:8081",           // Android Emulator (React Native CLI)
-                "http://127.0.0.1:8081",          // Localhost mobil test
-                "https://your-vercel-app.vercel.app", // Vercel production domain
-                "https://fullstack-ai-chat-dpog.onrender.com" // Render domain (self call izinli)
+                "http://localhost:3000",         // React (eski)
+                "http://localhost:5173",         // Vite React portu ✅
+                "http://10.0.2.2:8081",          // Android Emulator
+                "http://127.0.0.1:8081",         // Mobil test
+                "https://your-vercel-app.vercel.app", // Vercel deploy
+                "https://fullstack-ai-chat-dpog.onrender.com" // Backend Render URL
             )
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
         });
 });
+
 
 // 🔹 2️⃣ Controller & Swagger servisi
 builder.Services.AddControllers();
